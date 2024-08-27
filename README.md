@@ -1,7 +1,6 @@
 import streamlit as st
 import pickle
 
-
 # load pkl file
 with open('model_diabetes.pkl', 'rb') as file:
     model = pickle.load(file)
