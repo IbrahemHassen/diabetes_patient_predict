@@ -1,19 +1,25 @@
-# 🎈 Blank app template
+import streamlit as st
+import pickle
 
-A simple Streamlit app template for you to modify!
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+# load pkl file
+with open('model_diabetes.pkl', 'rb') as file:
+    model = pickle.load(file)
 
-### How to run it on your own machine
+#title the page
+st.title("diabetes_patient_predict")
 
-1. Install the requirements
+#set image
 
-   ```
-   $ pip install -r requirements.txt
-   ```
+#inputs
+Pregnancies = st.number_input('Pregnancies' , min_value=0.0 , max_value=10.0,value=1.0)
+Glucose = st.number_input('Glucose' , min_value=0.0 , max_value=10.0,value=1.0)
+Insulin =  st.number_input('Insulin' , min_value=0.0 , max_value=100.0,value=1.0)
+BMI =  st.number_input('BMI' , min_value=0.0 , max_value=100.0,value=1.0)
+DiabetesPedigreeFunction =  st.number_input('DiabetesPedigreeFunction' , min_value=0.0 , max_value=100.0,value=1.0)
+Age =  st.number_input('Age' , min_value=0.0 , max_value=100.0,value=1.0)
 
-2. Run the app
+output = model.predict([[Pregnancies,Glucose,Insulin,BMI,DiabetesPedigreeFunction,Age]])
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+#display the result
+st.write("diabetes patient : ",round(output[0],2))
