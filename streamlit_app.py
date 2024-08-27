@@ -1,25 +1,33 @@
 import streamlit as st
 import pickle
 
-
-# load pkl file
-with open('diabetes_model.pkl', 'rb') as file:
+# Load the machine learning model
+model_path = 'diabetes_model.pkl'
+with open(diabetes_model.pkl, 'rb') as file:
     model = pickle.load(file)
 
-#title the page
-st.title("diabetes_patient_predict")
+# Title of the app
+st.title("Diabetes Prediction")
 
-#set image
+# User input fields
+Pregnancies = st.number_input("Enter number of pregnancies:", min_value=0)
+Glucose = st.number_input("Enter your glucose level:", min_value=0)
+Insulin = st.number_input("Enter your insulin level:", min_value=0)
+BMI = st.number_input("Enter your BMI:", min_value=0.0)
+DiabetesPedigreeFunction = st.number_input("Enter your diabetes pedigree function:", min_value=0.0)
+Age = st.number_input("Enter your age:", min_value=0)
 
-#inputs
-Pregnancies = st.number_input('Pregnancies' , min_value=0.0 , max_value=10.0,value=1.0)
-Glucose = st.number_input('Glucose' , min_value=0.0 , max_value=10.0,value=1.0)
-Insulin =  st.number_input('Insulin' , min_value=0.0 , max_value=100.0,value=1.0)
-BMI =  st.number_input('BMI' , min_value=0.0 , max_value=100.0,value=1.0)
-DiabetesPedigreeFunction =  st.number_input('DiabetesPedigreeFunction' , min_value=0.0 , max_value=100.0,value=1.0)
-Age =  st.number_input('Age' , min_value=0.0 , max_value=100.0,value=1.0)
-
-output = model.predict([[Pregnancies,Glucose,Insulin,BMI,DiabetesPedigreeFunction,Age]])
-
-#display the result
-st.write("diabetes patient : ",round(output[0],2))
+# When the user clicks the predict button
+if st.button("Predict"):
+    try:
+        # Check for missing values
+        if None not in [Pregnancies, Glucose, Insulin, BMI, DiabetesPedigreeFunction, Age]:
+            output = model.predict([[Pregnancies, Glucose, Insulin, BMI, DiabetesPedigreeFunction, Age]])
+            if output[0] == 1:
+                st.write("The model predicts that the patient has diabetes.")
+            else:
+                st.write("The model predicts that the patient does not have diabetes.")
+        else:
+            st.error("Please fill in all fields.")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
